@@ -1,6 +1,8 @@
 const express = require('express')
+//const { fstat } = require('fs')
 const app = express()
 const morgan = require('morgan')
+const fs = require('fs')
 const args = require('minimist')(process.argv.slice(2))
 args['port']
 const port = args.port || process.env.PORT || 5000
@@ -8,7 +10,10 @@ const port = args.port || process.env.PORT || 5000
 const server = app.listen(port, () => {
     console.log('App is running on port %PORT%'.replace('%PORT%',port))
 });
-app.use(morgan('tiny'))
+
+//morgan('combined'))
+
+app.use(fs.writeFile('./access.log').morgan('combined'))
 
 app.get('/app/', (req, res) => {
     res.status(200).end('OK')
