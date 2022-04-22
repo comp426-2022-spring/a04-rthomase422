@@ -1,18 +1,27 @@
 const express = require('express')
-//const { fstat } = require('fs')
 const app = express()
-const logdb = require('./database')
+
 const errorhandler = require('errorhandler')
 const morgan = require('morgan')
 const fs = require('fs')
-//const md5 = require('md5')
-//const { error } = require('console')
-//app.use(express.urlencoded({extended : true}));
 
-//app.use(express.json)
+
+const logdb = require('./database')
+
+
+//const md5 = require('md5')
+
+
+app.use(express.urlencoded({extended : true}));
+app.use(express.json)
+
+
 const args = require('minimist')(process.argv.slice(2))
 console.log(args)
 args['port']
+args['help']
+args['debug']
+args['log']
 
 const help = (`
 server.js [options]
@@ -36,19 +45,19 @@ if (args.help || args.h) {
     console.log(help)
     process.exit(0)
 }
+
 const port = args.port || process.env.PORT || 5000
+const debug = args.debug || false
+const log = args.log || false
 
 const server = app.listen(port, () => {
     console.log('App is running on port %PORT%'.replace('%PORT%',port))
 });
+if (log != 'false') {
+    const WRITESTREAM = fs.createWriteStream('FILE', { flags: 'a' })
+    app.use(morgan('FORMAT', { stream: WRITESTREAM }))
+}
 
-//morgan('combined'))
-
-// Use morgan for logging to files
-// Create a write stream to append (flags: 'a') to a file
-const WRITESTREAM = fs.createWriteStream('FILE', { flags: 'a' })
-// Set up the access logging middleware
-app.use(morgan('FORMAT', { stream: WRITESTREAM }))
 
 const logging = (req, res, next) => {
     console.log(req.ip)
