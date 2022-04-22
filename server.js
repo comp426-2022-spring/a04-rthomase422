@@ -20,8 +20,6 @@ args['debug']
 args['log']
 
 
-
-
 if (args.help || args.h) {
     const help = (`
     server.js [options]
@@ -62,26 +60,29 @@ app.use((req, res, next) => {
         referer: req.headers['referer'],
         useragent: req.headers['user-agent']
     }
+    console.log(logdata)
     const stmt = logdb.prepare(`INSERT INTO accesslog (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`)
     const data = stmt.run(logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referer, logdata.useragent)
     next()
-});
+})
 
 
 if(args.debug || args.d) {
-    app.get('/app/log/access', (req, res, next) => {
+    app.get('/app/log/access/', (req, res, next) => {
         const stmt = logdb.prepare('SELECT * FROM accesslog'). all();
         res.status(200).json(stmt);
     })
 
-    app.get('/app/error', (req, res, next) => {
+    app.get('/app/error/', (req, res, next) => {
         throw new Error('Error test successful');
     })
 }
 
-if (log != 'false') {
+if (log == 'true') {
     const accesslog = fs.createWriteStream('access.log', { flags: 'a' })
     app.use(morgan('combined', { stream: accesslog }))
+} else {
+    console.log("Log file not created")
 }
 
 //app.use(fs.writeFile('./access.log', morgan('combined'), {flag : 'a' }, (err, req, res, next) => {if (err) {console.error(err)} else {console.log() }))
