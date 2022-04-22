@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/comp426-2022-spring/a04-rthomase422#readme",
   "dependencies": {
+    "better-sqlite3": "^7.5.1",
+    "errorhandler": "^1.5.1",
     "express": "^4.17.3",
     "fs": "^0.0.1-security",
     "minimist": "^1.2.6",

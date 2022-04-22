@@ -1,8 +1,11 @@
 const express = require('express')
 //const { fstat } = require('fs')
 const app = express()
+const logdb = require('./database')
+const errorhandler = require('errorhandler')
 const morgan = require('morgan')
 const fs = require('fs')
+//const { error } = require('console')
 const args = require('minimist')(process.argv.slice(2))
 args['port']
 const port = args.port || process.env.PORT || 5000
@@ -13,7 +16,17 @@ const server = app.listen(port, () => {
 
 //morgan('combined'))
 
-app.use(fs.writeFile('./access.log').morgan('combined'))
+app.use(fs.writeFile('./access.log', morgan('combined'), 
+    {flag : 'a' }, (err, req, res, next) => {
+        if (err) {
+            console.error(err)
+        } else {
+            console.log()
+        }
+
+    }
+))
+// maybe?
 
 app.get('/app/', (req, res) => {
     res.status(200).end('OK')
