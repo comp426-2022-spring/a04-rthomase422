@@ -1,4 +1,4 @@
-import database from 'better-sqlite3';
+const database = require('better-sqlite3')
 
 const logdb = new database('log.db')
 const stmt = logdb.prepare(`SELECT name FROM sqlite_master WHERE type='table' and name='accesslog';`)
@@ -17,14 +17,15 @@ if (row === undefined) {
             url TEXT, 
             protocal TEXT,
             httpversion TEXT, 
-            status INTEGER, 
+            status TEXT, 
             referer TEXT,
             useragent TEXT,
             
             
-        );`;
+        );`
 
-    logdb.exec(sqlInit);
+    logdb.exec(sqlInit)
+    
 } else {
     console.log('Log database exists.')
 }

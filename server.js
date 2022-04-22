@@ -3,7 +3,7 @@ const app = express()
 const errorhandler = require('errorhandler')
 const morgan = require('morgan')
 const fs = require('fs')
-const logdb = require('./database').default
+const logdb = require('./database')
 
 //const md5 = require('md5')
 app.use(express.urlencoded({extended : true}));
@@ -11,7 +11,7 @@ app.use(express.json)
 
 const args = require('minimist')(process.argv.slice(2))
 const port = args.port || process.env.PORT || 5555
-const debug = args.debug || false
+//const debug = args.debug || false
 const log = args.log || true
 console.log(args)
 args['port']
