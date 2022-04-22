@@ -1,11 +1,9 @@
 const express = require('express')
 const app = express()
-//const errorhandler = require('errorhandler')
+const errorhandler = require('errorhandler')
 const morgan = require('morgan')
 const fs = require('fs')
 const logdb = require('./database')
-
-//const md5 = require('md5')
 app.use(express.urlencoded({extended : true}));
 app.use(express.json)
 
@@ -67,14 +65,20 @@ app.use((req, res, next) => {
 })
 
 
-if(args.debug || args.d) {
+if(args.debug == 'true') {
     app.get('/app/log/access/', (req, res, next) => {
-        const stmt = logdb.prepare('SELECT * FROM accesslog'). all();
-        res.status(200).json(stmt);
-    })
+        try {
+            const stmt = logdb.prepare('SELECT * FROM accesslog'). all();
+            res.status(200).json(stmt);
+
+        } catch {
+            console.error(e)
+        }
+        
+    });
 
     app.get('/app/error/', (req, res, next) => {
-        throw new Error('Error test successful');
+        throw new Error('Error test successful.');
     })
 }
 
