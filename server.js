@@ -1,23 +1,18 @@
 const express = require('express')
 const app = express()
-
 const errorhandler = require('errorhandler')
 const morgan = require('morgan')
 const fs = require('fs')
-
-
 const logdb = require('./database')
-
 
 //const md5 = require('md5')
 app.use(express.urlencoded({extended : true}));
 app.use(express.json)
 
-
 const args = require('minimist')(process.argv.slice(2))
 const port = args.port || process.env.PORT || 5555
 const debug = args.debug || false
-const log = args.log || false
+const log = args.log || true
 console.log(args)
 args['port']
 args['help']
@@ -66,22 +61,22 @@ app.use((req, res, next) => {
         status: res.statusCode,
         referer: req.headers['referer'],
         useragent: req.headers['user-agent']
-    };
-    const stmt = logdb.prepare(`INSERT INTO access (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+    }
+    const stmt = logdb.prepare(`INSERT INTO accesslog (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`)
     const data = stmt.run(logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referer, logdata.useragent)
     next();
 });
 
 
-if(debug) {
+if(args.debug || args.d) {
     app.get('/app/log/access', (req, res, next) => {
         const stmt = logdb.prepare('SELECT * FROM access'). all();
         res.status(200).json(stmt);
-    });
+    })
 
     app.get('/app/error', (req, res, next) => {
         throw new Error('Error test successful');
-    });
+    })
 }
 
 if (log != 'false') {
