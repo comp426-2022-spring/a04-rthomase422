@@ -8,7 +8,7 @@ app.use(express.urlencoded({extended : true}));
 app.use(express.json)
 
 const args = require('minimist')(process.argv.slice(2))
-const port = args.port || process.env.PORT || 5555
+const port = args.port || process.env.PORT || 5000
 //const debug = args.debug || false
 //const log = args.log || true
 console.log(args)
@@ -124,8 +124,8 @@ const server = app.listen(port, () => {
     console.log('App is running on port %PORT%'.replace('%PORT%',port))
 });
 
-
-app.get('/app/', (req, res, next) => {
+{
+app.get('/app/', (req, res) => {
     res.status(200).end('OK')
     res.type('text/plain')
 
@@ -151,7 +151,7 @@ app.get('/app/flip/call/tails', (req, res) => {
     var tails = flipACoin("tails")
     res.status(200).json(tails)
 })
- 
+}
 
 app.use(function(req, res) {
     res.status(404).send("Endpoint does not exist")
