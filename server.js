@@ -77,9 +77,15 @@ app.use((req, res, next) => {
 });
 
 
-const logging = (req, res, next) => {
-    console.log(req.ip)
-    next()
+if(debug) {
+    app.get('/appp/log/access', (req, res, next) => {
+        const stmt = logdb.prepare('SELECT * FROM access'). all();
+        res.status(200).json(stmt);
+    });
+
+    app.get('/app/error', (req, res, next) => {
+        throw new Error('Error test successful');
+    });
 }
 
 //app.use(fs.writeFile('./access.log', morgan('combined'), {flag : 'a' }, (err, req, res, next) => {if (err) {console.error(err)} else {console.log() }))

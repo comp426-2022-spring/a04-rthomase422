@@ -15,6 +15,7 @@ if (row === undefined) {
             time VARCHAR, 
             method VARCHAR, 
             url VARCHAR, 
+            protocal VARCHAR,
             httpversion NUMERIC, 
             status INTEGER, 
             referer VARCHAR,
