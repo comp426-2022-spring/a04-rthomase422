@@ -78,7 +78,7 @@ if(args.debug || args.d) {
     })
 }
 
-if (log == 'true') {
+if (log != 'false') {
     const accesslog = fs.createWriteStream('access.log', { flags: 'a' })
     app.use(morgan('combined', { stream: accesslog }))
 } else {
@@ -120,6 +120,12 @@ app.use(function(req, res) {
     res.status(404).end("Endpoint does not exist")
     res.type("text/plain")
 })
+
+process.on('SIGINT', () => {
+    server.close(() => {
+        console.log('\nApp stopped.');
+    });
+});
 
 function coinFlip() {
     return Math.random() > .5 ? ("heads") : ("tails")
