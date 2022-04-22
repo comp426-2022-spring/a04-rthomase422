@@ -37,7 +37,6 @@ if (args.help || args.h) {
     process.exit(0)
 }
 
-
 if (!args.log) {
     const accesslog = fs.createWriteStream('access.log', { flags: 'a' })
     app.use(morgan('combined', { stream: accesslog }))
@@ -65,64 +64,6 @@ app.use((req, res, next) => {
     next()
 })
 
-
-
-if(args.debug == 'true') {
-    app.get('/app/log/access/', (req, res, next) => {
-        try {
-            const stmt = logdb.prepare('SELECT * FROM accesslog'). all();
-            res.status(200).json(stmt);
-
-        } catch {
-            console.error(e)
-        }
-        
-    });
-
-    app.get('/app/error/', (req, res, next) => {
-        throw new Error('Error test successful.');
-    })
-}
-
-const server = app.listen(port, () => {
-    console.log('App is running on port %PORT%'.replace('%PORT%',port))
-});
-
-//app.use(fs.writeFile('./access.log', morgan('combined'), {flag : 'a' }, (err, req, res, next) => {if (err) {console.error(err)} else {console.log() }))
-// maybe?
-
-app.get('/app/', (req, res, next) => {
-    res.status(200).end('OK')
-    res.type('text/plain')
-
-});
-
-
-app.get('/app/flip/', (req, res) => {
-    var flip = coinFlip()
-    res.status(200).json({ "flip" : flip})
-})
-
-app.get('/app/flips/:number', (req, res) => {
-    var flips = coinFlips(req.params.number)
-    res.status(200).json({ "raw" : flips, "summary" : countFlips(flips)})
-})
-
-app.get('/app/flip/call/heads', (req, res) => {
-    var heads = flipACoin("heads")
-    res.status(200).json(heads)
-})
-
-app.get('/app/flip/call/tails', (req, res) => {
-    var tails = flipACoin("tails")
-    res.status(200).json(tails)
-})
- 
-
-app.use(function(req, res) {
-    res.status(404).end("Endpoint does not exist")
-    res.type("text/plain")
-})
 
 function coinFlip() {
     return Math.random() > .5 ? ("heads") : ("tails")
@@ -168,3 +109,57 @@ function flipACoin(call) {
     return {call: call, flip: flip, result: result}
 }
   
+if(args.debug == 'true') {
+    app.get('/app/log/access/', (req, res, next) => {
+        try {
+            const stmt = logdb.prepare('SELECT * FROM accesslog'). all();
+            res.status(200).json(stmt);
+
+        } catch {
+            console.error(e)
+        }
+        
+    });
+
+    app.get('/app/error/', (req, res, next) => {
+        throw new Error('Error test successful.');
+    })
+}
+
+const server = app.listen(port, () => {
+    console.log('App is running on port %PORT%'.replace('%PORT%',port))
+});
+
+
+app.get('/app/', (req, res, next) => {
+    res.status(200).end('OK')
+    res.type('text/plain')
+
+});
+
+
+app.get('/app/flip/', (req, res) => {
+    var flip = coinFlip()
+    res.status(200).json({ "flip" : flip})
+})
+
+app.get('/app/flips/:number', (req, res) => {
+    var flips = coinFlips(req.params.number)
+    res.status(200).json({ "raw" : flips, "summary" : countFlips(flips)})
+})
+
+app.get('/app/flip/call/heads', (req, res) => {
+    var heads = flipACoin("heads")
+    res.status(200).json(heads)
+})
+
+app.get('/app/flip/call/tails', (req, res) => {
+    var tails = flipACoin("tails")
+    res.status(200).json(tails)
+})
+ 
+
+app.use(function(req, res) {
+    res.status(404).end("Endpoint does not exist")
+    res.type("text/plain")
+})
