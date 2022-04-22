@@ -11,6 +11,7 @@ const fs = require('fs')
 
 //app.use(express.json)
 const args = require('minimist')(process.argv.slice(2))
+console.log(args)
 args['port']
 
 const help = (`
@@ -49,6 +50,10 @@ const WRITESTREAM = fs.createWriteStream('FILE', { flags: 'a' })
 // Set up the access logging middleware
 app.use(morgan('FORMAT', { stream: WRITESTREAM }))
 
+const logging = (req, res, next) => {
+    console.log(req.ip)
+    next()
+}
 
 //app.use(fs.writeFile('./access.log', morgan('combined'), {flag : 'a' }, (err, req, res, next) => {if (err) {console.error(err)} else {console.log() }))
 // maybe?
