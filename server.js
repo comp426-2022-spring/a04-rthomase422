@@ -10,12 +10,10 @@ app.use(express.json)
 const args = require('minimist')(process.argv.slice(2))
 const port = args.port || process.env.PORT || 5555
 //const debug = args.debug || false
-const log = args.log || true
+//const log = args.log || true
 console.log(args)
 args['port']
-args['help']
-args['debug']
-args['log']
+
 
 
 if (args.help || args.h) {
@@ -40,9 +38,12 @@ if (args.help || args.h) {
 }
 
 
-const server = app.listen(port, () => {
-    console.log('App is running on port %PORT%'.replace('%PORT%',port))
-});
+if (!args.log) {
+    const accesslog = fs.createWriteStream('access.log', { flags: 'a' })
+    app.use(morgan('combined', { stream: accesslog }))
+} else {
+    console.log("Log file not created")
+}
 
 
 app.use((req, res, next) => {
@@ -65,6 +66,7 @@ app.use((req, res, next) => {
 })
 
 
+
 if(args.debug == 'true') {
     app.get('/app/log/access/', (req, res, next) => {
         try {
@@ -82,12 +84,9 @@ if(args.debug == 'true') {
     })
 }
 
-if (log != 'false') {
-    const accesslog = fs.createWriteStream('access.log', { flags: 'a' })
-    app.use(morgan('combined', { stream: accesslog }))
-} else {
-    console.log("Log file not created")
-}
+const server = app.listen(port, () => {
+    console.log('App is running on port %PORT%'.replace('%PORT%',port))
+});
 
 //app.use(fs.writeFile('./access.log', morgan('combined'), {flag : 'a' }, (err, req, res, next) => {if (err) {console.error(err)} else {console.log() }))
 // maybe?
