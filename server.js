@@ -37,7 +37,7 @@ if (args.help || args.h) {
     process.exit(0)
 }
 
-if (!args.log) {
+if (args.log == true) {
     const accesslog = fs.createWriteStream('access.log', { flags: 'a' })
     app.use(morgan('combined', { stream: accesslog }))
 } else {
@@ -109,7 +109,7 @@ function flipACoin(call) {
     return {call: call, flip: flip, result: result}
 }
   
-if(args.debug == 'true') {
+if(args.debug) {
     app.get('/app/log/access', (req, res) => {
         const stmt = logdb.prepare('SELECT * FROM accesslog').all();
         res.status(200).json(stmt);
