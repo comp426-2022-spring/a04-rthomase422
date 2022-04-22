@@ -5,9 +5,36 @@ const logdb = require('./database')
 const errorhandler = require('errorhandler')
 const morgan = require('morgan')
 const fs = require('fs')
+//const md5 = require('md5')
 //const { error } = require('console')
+//app.use(express.urlencoded({extended : true}));
+
+//app.use(express.json)
 const args = require('minimist')(process.argv.slice(2))
 args['port']
+
+const help = (`
+server.js [options]
+
+--port	Set the port number for the server to listen on. Must be an integer
+            between 1 and 65535.
+
+--debug	If set to true, creates endlpoints /app/log/access/ which returns
+            a JSON access log from the database and /app/error which throws 
+            an error with the message "Error test successful." Defaults to 
+            false.
+
+--log		If set to false, no log files are written. Defaults to true.
+            Logs are always written to database.
+
+--help	Return this message and exit.
+`)
+
+
+if (args.help || args.h) {
+    console.log(help)
+    process.exit(0)
+}
 const port = args.port || process.env.PORT || 5000
 
 const server = app.listen(port, () => {
@@ -16,23 +43,23 @@ const server = app.listen(port, () => {
 
 //morgan('combined'))
 
-app.use(fs.writeFile('./access.log', morgan('combined'), 
-    {flag : 'a' }, (err, req, res, next) => {
-        if (err) {
-            console.error(err)
-        } else {
-            console.log()
-        }
+// Use morgan for logging to files
+// Create a write stream to append (flags: 'a') to a file
+const WRITESTREAM = fs.createWriteStream('FILE', { flags: 'a' })
+// Set up the access logging middleware
+app.use(morgan('FORMAT', { stream: WRITESTREAM }))
 
-    }
-))
+
+//app.use(fs.writeFile('./access.log', morgan('combined'), {flag : 'a' }, (err, req, res, next) => {if (err) {console.error(err)} else {console.log() }))
 // maybe?
 
-app.get('/app/', (req, res) => {
+app.get('/app/', (req, res, next) => {
     res.status(200).end('OK')
     res.type('text/plain')
 
-})
+});
+
+
 app.get('/app/flip/', (req, res) => {
     var flip = coinFlip()
     res.status(200).json({ "flip" : flip})
