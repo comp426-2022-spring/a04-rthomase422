@@ -78,7 +78,7 @@ app.use((req, res, next) => {
 
 
 if(debug) {
-    app.get('/appp/log/access', (req, res, next) => {
+    app.get('/app/log/access', (req, res, next) => {
         const stmt = logdb.prepare('SELECT * FROM access'). all();
         res.status(200).json(stmt);
     });
