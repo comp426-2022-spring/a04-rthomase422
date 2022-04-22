@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const errorhandler = require('errorhandler')
+//const errorhandler = require('errorhandler')
 const morgan = require('morgan')
 const fs = require('fs')
 const logdb = require('./database')
@@ -64,13 +64,13 @@ app.use((req, res, next) => {
     }
     const stmt = logdb.prepare(`INSERT INTO accesslog (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`)
     const data = stmt.run(logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referer, logdata.useragent)
-    next();
+    next()
 });
 
 
 if(args.debug || args.d) {
     app.get('/app/log/access', (req, res, next) => {
-        const stmt = logdb.prepare('SELECT * FROM access'). all();
+        const stmt = logdb.prepare('SELECT * FROM accesslog'). all();
         res.status(200).json(stmt);
     })
 
@@ -80,8 +80,8 @@ if(args.debug || args.d) {
 }
 
 if (log != 'false') {
-    const WRITESTREAM = fs.createWriteStream('FILE', { flags: 'a' })
-    app.use(morgan('FORMAT', { stream: WRITESTREAM }))
+    const accesslog = fs.createWriteStream('access.log', { flags: 'a' })
+    app.use(morgan('combined', { stream: accesslog }))
 }
 
 //app.use(fs.writeFile('./access.log', morgan('combined'), {flag : 'a' }, (err, req, res, next) => {if (err) {console.error(err)} else {console.log() }))

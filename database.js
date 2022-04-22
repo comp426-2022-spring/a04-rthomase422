@@ -19,7 +19,7 @@ if (row === undefined) {
             httpversion TEXT, 
             status TEXT, 
             referer TEXT,
-            useragent TEXT,
+            useragent TEXT
             
             
         );`

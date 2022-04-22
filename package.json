@@ -4,7 +4,7 @@
   "description": "Build a database with logs, errors and middleware",
   "main": "server.js",
   "scripts": {
-    "test": "node server.js",
+    "test": "node server.js --debug --port=5555",
     "start": "node server.js"
   },
   "repository": {
