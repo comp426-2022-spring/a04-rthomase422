@@ -1,7 +1,7 @@
 const database = require('better-sqlite3')
 
 const logdb = new database('log.db')
-const stmt = dp.prepare(`SELECT name FROM sqlite_master WHERE type='table' and 'access';`)
+const stmt = db.prepare(`SELECT name FROM sqlite_master WHERE type='table' and 'access';`)
 let row = stmt.get();
 
 if (row === undefined) {
