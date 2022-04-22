@@ -120,11 +120,11 @@ if(args.debug == 'true') {
     })
 }
 
-const server = app.listen(port, () => {
+const server = app.listen(port, "localhost", () => {
     console.log('App is running on port %PORT%'.replace('%PORT%',port))
 });
 
-{
+
 
 app.get('/app/', (req, res) => {
     // Respond with status 200
@@ -155,7 +155,7 @@ app.get('/app/flip/call/tails', (req, res) => {
     var tails = flipACoin("tails")
     res.status(200).json(tails)
 })
-}
+
 
 app.use(function(req, res) {
     res.status(404).send("Endpoint does not exist")
