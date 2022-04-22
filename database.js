@@ -25,9 +25,9 @@ if (row === undefined) {
         );`
 
     logdb.exec(sqlInit)
-    
+
 } else {
     console.log('Log database exists.')
 }
 
-export default logdb
+module.exports = logdb
