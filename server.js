@@ -88,7 +88,7 @@ if (log != 'false') {
 //app.use(fs.writeFile('./access.log', morgan('combined'), {flag : 'a' }, (err, req, res, next) => {if (err) {console.error(err)} else {console.log() }))
 // maybe?
 
-app.get('/app/', (req, res) => {
+app.get('/app/', (req, res, next) => {
     res.status(200).end('OK')
     res.type('text/plain')
 
@@ -120,12 +120,6 @@ app.use(function(req, res) {
     res.status(404).end("Endpoint does not exist")
     res.type("text/plain")
 })
-
-process.on('SIGINT', () => {
-    server.close(() => {
-        console.log('\nApp stopped.');
-    });
-});
 
 function coinFlip() {
     return Math.random() > .5 ? ("heads") : ("tails")
