@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const errorhandler = require('errorhandler')
+//const errorhandler = require('errorhandler')
 const morgan = require('morgan')
 const fs = require('fs')
 const logdb = require('./database')
@@ -110,18 +110,12 @@ function flipACoin(call) {
 }
   
 if(args.debug == 'true') {
-    app.get('/app/log/access/', (req, res, next) => {
-        try {
-            const stmt = logdb.prepare('SELECT * FROM accesslog'). all();
-            res.status(200).json(stmt);
+    app.get('/app/log/access', (req, res) => {
+        const stmt = logdb.prepare('SELECT * FROM accesslog').all();
+        res.status(200).json(stmt);
+    })
 
-        } catch {
-            console.error(e)
-        }
-        
-    });
-
-    app.get('/app/error/', (req, res, next) => {
+    app.get('/app/error', (req, res) => {
         throw new Error('Error test successful.');
     })
 }
