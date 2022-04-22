@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express');
 const app = express()
 //const errorhandler = require('errorhandler')
 const morgan = require('morgan')
@@ -7,12 +7,12 @@ const logdb = require('./database')
 app.use(express.urlencoded({extended : true}));
 app.use(express.json)
 
-const args = require('minimist')(process.argv.slice(2))
+const args = require("minimist")(process.argv.slice(2))
 const port = args.port || process.env.PORT || 5000
 //const debug = args.debug || false
 //const log = args.log || true
 console.log(args)
-args['port', 'debug', 'log', 'help']
+args["port", "debug", "log", "help"]
 
 
 
@@ -45,7 +45,7 @@ if (!args.log) {
 }
 
 
-app.use((req, res, next) => {
+app.use( (req, res, next) => {
     let logdata = {
         remoteaddr: req.ip,
         remoteuser: req.user,
