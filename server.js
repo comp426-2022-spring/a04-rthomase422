@@ -3,7 +3,7 @@ const app = express()
 //const errorhandler = require('errorhandler')
 const morgan = require('morgan')
 const fs = require('fs')
-const logdb = require('./database')
+const logdb = require('./database.js')
 app.use(express.urlencoded({extended : true}));
 app.use(express.json)
 
