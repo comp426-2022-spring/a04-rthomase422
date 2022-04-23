@@ -11,7 +11,7 @@ const args = require("minimist")(process.argv.slice(2))
 const port = args.port || process.env.PORT || 5555
 const debug = args.debug || false
 const log = args.log || true
-console.log(args)
+//console.log(args)
 args["port", "debug", "log", "help"]
 
 
@@ -126,7 +126,7 @@ if(debug == true) {
     });
 }
 
-const server = app.listen(port, "localhost", () => {
+const server = app.listen(port,  () => {
     console.log('App is running on port %PORT%'.replace('%PORT%',port))
 });
 
@@ -164,4 +164,10 @@ app.get('/app/flip/call/tails', (req, res) => {
 app.use(function(req, res) {
     res.status(404).send("Endpoint does not exist")
     res.type("text/plain")
+});
+
+process.on('SIGTERM', () => {
+    server.close(() => {
+        console.log('Server stopped')
+    })
 })
