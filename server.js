@@ -110,7 +110,7 @@ function flipACoin(call) {
 }
   
 if(debug == true) {
-    app.get('/app/log/access', (req, res) => {
+    app.get('/app/log/access/', (req, res) => {
         try {
 
             const stmt = logdb.prepare('SELECT * FROM accesslog').all();
@@ -162,8 +162,7 @@ app.get('/app/flip/call/tails', (req, res) => {
 
 
 app.use(function(req, res) {
-    res.status(404).send("Endpoint does not exist")
-    res.type("text/plain")
+    res.status(404).send('404 NOT FOUND')
 });
 
 process.on('SIGTERM', () => {
