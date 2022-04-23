@@ -10,8 +10,8 @@ app.use(express.json)
 const args = require("minimist")(process.argv.slice(2))
 const port = args.port || process.env.PORT || 5000
 //const debug = args.debug || false
-const log = args.log || true
-console.log(args)
+//const log = args.log || true
+//console.log(args)
 args["port", "debug", "log", "help"]
 
 
@@ -37,7 +37,7 @@ if (args.help || args.h) {
     process.exit(0)
 }
 
-if (log == true) {
+if (args.log == true) {
     const accesslog = fs.createWriteStream('access.log', { flags: 'a' })
     app.use(morgan('combined', { stream: accesslog }))
 } else {
@@ -58,8 +58,8 @@ app.use( (req, res, next) => {
         referer: req.headers['referer'],
         useragent: req.headers['user-agent']
     }
-    console.log(logdata)
-    const stmt = logdb.prepare(`INSERT INTO accesslog (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`)
+    //console.log(logdata)
+    const stmt = logdb.prepare('INSERT INTO accesslog (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);')
     const info = stmt.run(logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referer, logdata.useragent)
     next()
 })
@@ -111,20 +111,24 @@ function flipACoin(call) {
   
 if(args.debug) {
     app.get('/app/log/access', (req, res) => {
-        const stmt = logdb.prepare('SELECT * FROM accesslog').all();
-        res.status(200).json(stmt);
-    })
+        try {
+
+            const stmt = logdb.prepare('SELECT * FROM accesslog').all();
+            res.status(200).json(stmt);
+        } catch {
+            console.error(e)
+        }
+      
+    });
 
     app.get('/app/error', (req, res) => {
         throw new Error('Error test successful.');
-    })
+    });
 }
 
 const server = app.listen(port, "localhost", () => {
     console.log('App is running on port %PORT%'.replace('%PORT%',port))
 });
-
-
 
 app.get('/app/', (req, res) => {
     // Respond with status 200

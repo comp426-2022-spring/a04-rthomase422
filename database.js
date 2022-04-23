@@ -1,3 +1,4 @@
+"use strict";
 
 const database = require('better-sqlite3')
 
@@ -11,21 +12,21 @@ if (row === undefined) {
     const sqlInit = `
         CREATE TABLE accesslog ( 
             id INTEGER PRIMARY KEY, 
-            remoteaddr TEXT,
-            remoteuser TEXT,
-            time TEXT, 
-            method TEXT, 
-            url TEXT, 
-            protocal TEXT,
-            httpversion TEXT, 
-            status TEXT, 
-            referer TEXT,
-            useragent TEXT
+            remoteaddr VARCHAR,
+            remoteuser VARCHAR,
+            time VARCHAR, 
+            method VARCHAR, 
+            url VARCHAR, 
+            protocal VARCHAR,
+            httpversion NUMERIC, 
+            status INTEGER, 
+            referer VARCHAR,
+            useragent VARCHAR
             
-            
-        );`
+        )`
 
     logdb.exec(sqlInit)
+    console.log('Database has been created.')
 
 } else {
     console.log('Log database exists.')
