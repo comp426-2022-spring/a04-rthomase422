@@ -10,7 +10,7 @@ app.use(express.json)
 const args = require("minimist")(process.argv.slice(2))
 const port = args.port || process.env.PORT || 5000
 //const debug = args.debug || false
-//const log = args.log || true
+const log = args.log || true
 console.log(args)
 args["port", "debug", "log", "help"]
 
@@ -37,7 +37,7 @@ if (args.help || args.h) {
     process.exit(0)
 }
 
-if (args.log == true) {
+if (log == true) {
     const accesslog = fs.createWriteStream('access.log', { flags: 'a' })
     app.use(morgan('combined', { stream: accesslog }))
 } else {
@@ -60,7 +60,7 @@ app.use( (req, res, next) => {
     }
     console.log(logdata)
     const stmt = logdb.prepare(`INSERT INTO accesslog (remoteaddr, remoteuser, time, method, url, protocol, httpversion, status, referer, useragent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`)
-    const data = stmt.run(logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referer, logdata.useragent)
+    const info = stmt.run(logdata.remoteaddr, logdata.remoteuser, logdata.time, logdata.method, logdata.url, logdata.protocol, logdata.httpversion, logdata.status, logdata.referer, logdata.useragent)
     next()
 })
 
