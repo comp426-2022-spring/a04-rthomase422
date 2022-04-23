@@ -9,9 +9,9 @@ app.use(express.json)
 
 const args = require("minimist")(process.argv.slice(2))
 const port = args.port || process.env.PORT || 5555
-//const debug = args.debug || false
-//const log = args.log || true
-//console.log(args)
+const debug = args.debug || false
+const log = args.log || true
+console.log(args)
 args["port", "debug", "log", "help"]
 
 
@@ -37,7 +37,7 @@ if (args.help || args.h) {
     process.exit(0)
 }
 
-if (args.log == true) {
+if (log == true) {
     const accesslog = fs.createWriteStream('access.log', { flags: 'a' })
     app.use(morgan('combined', { stream: accesslog }))
 } else {
@@ -109,7 +109,7 @@ function flipACoin(call) {
     return {call: call, flip: flip, result: result}
 }
   
-if(args.debug) {
+if(debug == true) {
     app.get('/app/log/access', (req, res) => {
         try {
 
