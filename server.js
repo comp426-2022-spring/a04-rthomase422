@@ -129,6 +129,7 @@ app.use(function (req, res, next) {
   res.type("text/plain")
 })
 
+
 function coinFlip() {
   return Math.random() > 0.5 ? "heads" : "tails"
 }
