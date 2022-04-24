@@ -1,16 +1,16 @@
-const express = require("express")
+const express = require('express')
 const app = express()
 //const errorhandler = require('errorhandler')
-const morgan = require("morgan")
-const fs = require("fs")
-const logdb = require("./database.js")
+const morgan = require('morgan')
+const fs = require('fs')
+const logdb = require('./database.js')
 
 const args = require("minimist")(process.argv.slice(2))
 const port = args.port || process.env.PORT || 5555
 const debug = args.debug || false
-//const log = args.log || true
-console.log(debug)
-//args[("port", "debug", "log", "help")];
+const log = args.log || true
+console.log(args)
+args[("port", "debug", "log", "help")];
 
 const help = `
 server.js [options]
@@ -41,7 +41,7 @@ const server = app.listen(port, () => {
   console.log("App is running on port %PORT%".replace("%PORT%", port))
 })
 
-app.get("/app/", (req, res) => {
+app.get('/app/', (req, res) => {
   // Respond with status 200
   res.statusCode = 200
   // Respond with status message "OK"
@@ -51,8 +51,8 @@ app.get("/app/", (req, res) => {
 })
 
 if (args.log === "true") {
-  const accesslog = fs.createWriteStream("access.log", {flags: "a"})
-  app.use(morgan("combined", {stream: accesslog}))
+  const accesslog = fs.createWriteStream('access.log', {flags: 'a'})
+  app.use(morgan('combined', {stream: accesslog}))
 } else {
   console.log("Log file not created")
 }
@@ -89,28 +89,28 @@ app.use((req, res, next) => {
   next()
 })
 
-app.get("/app/flip/", (req, res, next) => {
+app.get('/app/flip/', (req, res, next) => {
   var flip = coinFlip()
   res.status(200).json({flip: flip})
 })
 
-app.get("/app/flips/:number", (req, res, next) => {
+app.get('/app/flips/:number', (req, res, next) => {
   var flips = coinFlips(req.params.number)
   res.status(200).json({raw: flips, summary: countFlips(flips)})
 })
 
-app.get("/app/flip/call/heads", (req, res, next) => {
+app.get('/app/flip/call/heads', (req, res, next) => {
   var heads = flipACoin("heads")
   res.status(200).json(heads)
 })
 
-app.get("/app/flip/call/tails", (req, res, next) => {
+app.get('/app/flip/call/tails', (req, res, next) => {
   var tails = flipACoin("tails")
   res.status(200).json(tails)
 })
 
 if (debug === true) {
-  app.get("/app/log/access", (req, res, next) => {
+  app.get('/app/log/access', (req, res, next) => {
     try {
       const stmt = logdb.prepare("SELECT * FROM accesslog").all()
       res.status(200).json(stmt)
@@ -119,7 +119,7 @@ if (debug === true) {
     }
   })
 
-  app.get("/app/error", (req, res, next) => {
+  app.get('/app/error', (req, res, next) => {
     throw new Error("Error test successful.")
   })
 }
