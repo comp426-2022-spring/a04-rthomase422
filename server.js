@@ -1,18 +1,8 @@
-const express = require('express')
-const app = express()
-//const errorhandler = require('errorhandler')
-const morgan = require('morgan')
-const fs = require('fs')
-const logdb = require('./database.js')
 const minimist = require('minimist')
 
 const args = minimist(process.argv.slice(2))
-const port = args.port || process.env.PORT || 5555
-const debug = args.debug || false
-const log = args.log || true
+
 //console.log(args)
-
-
 
 const help = (`
 server.js [options]
@@ -30,6 +20,16 @@ server.js [options]
 
 --help	Return this message and exit.
 `)
+const port = args.port || process.env.PORT || 5555
+const debug = args.debug || false
+const log = args.log || true
+
+const express = require('express')
+const app = express()
+//const errorhandler = require('errorhandler')
+const morgan = require('morgan')
+const fs = require('fs')
+const logdb = require('./database.js')
 
 if (args.help || args.h) {
   console.log(help)
