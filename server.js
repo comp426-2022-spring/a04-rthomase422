@@ -20,6 +20,11 @@ server.js [options]
 
 --help	Return this message and exit.
 `)
+if (args.help || args.h) {
+  console.log(help)
+  process.exit(0)
+}
+
 const port = args.port || process.env.PORT || 5555
 const debug = args.debug || false
 const log = args.log || true
@@ -31,10 +36,7 @@ const morgan = require('morgan')
 const fs = require('fs')
 const logdb = require('./database.js')
 
-if (args.help || args.h) {
-  console.log(help)
-  process.exit(0)
-}
+
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json)
