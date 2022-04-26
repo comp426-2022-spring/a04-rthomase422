@@ -4,15 +4,17 @@ const app = express()
 const morgan = require('morgan')
 const fs = require('fs')
 const logdb = require('./database.js')
+const minimist = require('minimist')
 
-const args = require("minimist")(process.argv.slice(2))
+const args = minimist(process.argv.slice(2))
 const port = args.port || process.env.PORT || 5555
 const debug = args.debug || false
 const log = args.log || true
-console.log(args)
-args[("port", "debug", "log", "help")];
+//console.log(args)
+args['port']
 
-const help = `
+
+const help = (`
 server.js [options]
 
 --port	Set the port number for the server to listen on. Must be an integer
@@ -27,7 +29,7 @@ server.js [options]
             Logs are always written to database.
 
 --help	Return this message and exit.
-`
+`)
 
 if (args.help || args.h) {
   console.log(help)
@@ -37,8 +39,9 @@ if (args.help || args.h) {
 app.use(express.urlencoded({extended: true}))
 app.use(express.json)
 
+
 const server = app.listen(port, () => {
-  console.log("App is running on port %PORT%".replace("%PORT%", port))
+  console.log(`App is running on port ${port}`)
 })
 
 app.get('/app/', (req, res) => {
