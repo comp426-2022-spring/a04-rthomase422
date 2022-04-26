@@ -9,7 +9,7 @@ const minimist = require('minimist')
 const args = minimist(process.argv.slice(2))
 const port = args.port || process.env.PORT || 5555
 const debug = args.debug || false
-const log = args.log || true
+const log = args.log
 //console.log(args)
 args['port']
 
