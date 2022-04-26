@@ -58,7 +58,7 @@ if (log === true) {
   app.use(morgan('combined', {stream: accesslog}))
 } else {
   console.log("Log file not created")
-}
+} 
 
 app.use((req, res, next) => {
   let logdata = {
