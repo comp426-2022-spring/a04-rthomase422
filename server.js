@@ -39,10 +39,10 @@ if (args.help || args.h) {
 app.use(express.urlencoded({extended: true}))
 app.use(express.json)
 
-
 const server = app.listen(port, () => {
-  console.log(`App is running on port ${port}`)
-})
+  console.log('App is running on port %PORT%'.replace('%PORT%',port))
+});
+
 
 app.get('/app/', (req, res) => {
   // Respond with status 200
@@ -174,3 +174,5 @@ function flipACoin(call) {
   }
   return {call: call, flip: flip, result: result}
 }
+
+
