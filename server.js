@@ -53,7 +53,7 @@ app.get('/app/', (req, res) => {
   res.end(res.statusCode + " " + res.statusMessage)
 })
 
-if (args.log === "true") {
+if (log === true) {
   const accesslog = fs.createWriteStream('access.log', {flags: 'a'})
   app.use(morgan('combined', {stream: accesslog}))
 } else {

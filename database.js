@@ -1,8 +1,8 @@
 "use strict;"
 
-const database = require("better-sqlite3")
+const Database = require('better-sqlite3')
 
-const logdb = new database('log.db')
+const logdb = new Database('log.db')
 const stmt = logdb.prepare(
   `SELECT name FROM sqlite_master WHERE type='table' and name='accesslog';`
 )
@@ -25,7 +25,8 @@ if (row === undefined) {
             referer TEXT,
             useragent TEXT
             
-        )`
+        );
+  `;
 
   logdb.exec(sqlInit)
   console.log("Database has been created.")
