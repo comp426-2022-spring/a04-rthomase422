@@ -24,21 +24,19 @@ if (args.help || args.h) {
   console.log(help)
   process.exit(0)
 }
-const express = require('express')
-const app = express()
+
+var express = require('express')
+
 //const errorhandler = require('errorhandler')
 const morgan = require('morgan')
 const fs = require('fs')
 const logdb = require('./database.js')
 
-const port = args.port || process.env.PORT || 5000
+const port = args.port || process.env.PORT || 5555
 const debug = args.debug || process.env.debug || false
 const log = args.log || process.env.log || true
 
-
-
-
-
+var app = express()
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json)
@@ -54,8 +52,8 @@ app.get('/app/', (req, res) => {
 })
 
 if (log === true) {
-  const accesslog = fs.createWriteStream('access.log', {flags: 'a'})
-  app.use(morgan('combined', {stream: accesslog}))
+  const WRITESTREAM = fs.createWriteStream('FILE', {flags: 'a'})
+  app.use(morgan('combined', {stream: WRITESTREAM}))
 } else {
   console.log("Log file not created")
 } 
@@ -70,8 +68,8 @@ app.use((req, res, next) => {
     protocol: req.protocol,
     httpversion: req.httpVersion,
     status: res.statusCode,
-    referer: req.headers["referer"],
-    useragent: req.headers["user-agent"]
+    referer: req.headers['referer'],
+    useragent: req.headers['user-agent']
   }
   console.log(logdata)
   const stmt = logdb.prepare(
@@ -89,7 +87,7 @@ app.use((req, res, next) => {
     logdata.referer,
     logdata.useragent
   )
-  next()
+  next();
 })
 
 app.get('/app/flip/', (req, res, next) => {
@@ -113,22 +111,18 @@ app.get('/app/flip/call/tails', (req, res, next) => {
 })
 
 if (debug === true) {
-  app.get('/app/log/access', (req, res, next) => {
-    try {
-      const stmt = logdb.prepare("SELECT * FROM accesslog").all()
-      res.status(200).json(stmt)
-    } catch {
-      console.error(e)
-    }
+  app.get('/app/log/access/', (req, res) => {
+    const stmt = logdb.prepare("SELECT * FROM accesslog").all();
+    res.status(200).json(stmt)
   })
 
-  app.get('/app/error', (req, res, next) => {
+  app.get('/app/error/', (req, res) => {
     throw new Error("Error test successful.")
   })
 }
 
-app.use(function (req, res, next) {
-  res.status(404).send("404 NOT FOUND")
+app.use(function (req, res) {
+  res.status(404).send('404 NOT FOUND')
 })
 
 
