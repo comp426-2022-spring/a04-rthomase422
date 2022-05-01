@@ -24,17 +24,19 @@ if (args.help || args.h) {
   console.log(help)
   process.exit(0)
 }
-
-const port = args.port || process.env.PORT || 5555
-const debug = args.debug || false
-const log = args.log || true
-
 const express = require('express')
 const app = express()
 //const errorhandler = require('errorhandler')
 const morgan = require('morgan')
 const fs = require('fs')
 const logdb = require('./database.js')
+
+const port = args.port || process.env.PORT || 5000
+const debug = args.debug || process.env.debug || false
+const log = args.log || process.env.log || true
+
+
+
 
 
 
@@ -171,5 +173,4 @@ function flipACoin(call) {
   }
   return {call: call, flip: flip, result: result}
 }
-
 
