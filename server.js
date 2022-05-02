@@ -51,14 +51,14 @@ app.get('/app/', (req, res) => {
   res.status(200).send("200 OK")
 })
 
-if (log === true) {
+if (args.log == true && args.log == 'true') {
   const WRITESTREAM = fs.createWriteStream('access.log', {flags: 'a'})
   app.use(morgan('combined', {stream: WRITESTREAM}))
 } else {
   console.log("Log file not created")
 } 
 
-if (debug === true) {
+if (debug === true || debug === 'true') {
   app.get('/app/log/access/', (req, res) => {
     const stmt = logdb.prepare("SELECT * FROM accesslog").all();
     res.status(200).json(stmt)
