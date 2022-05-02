@@ -1,6 +1,6 @@
 {
   "name": "a04-rthomase422",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Build a database with logs, errors and middleware",
   "main": "server.js",
   "scripts": {

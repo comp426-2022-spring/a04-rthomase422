@@ -33,8 +33,8 @@ const fs = require('fs')
 const logdb = require('./database.js')
 
 const port = args.port || process.env.PORT || 5555
-//const debug = args.debug || process.env.debug || false
-//const log = args.log || process.env.log || true
+const debug = args.debug || process.env.debug || false
+const log = args.log || process.env.log || true
 
 var app = express()
 
@@ -51,14 +51,14 @@ app.get('/app/', (req, res) => {
   res.status(200).send("200 OK")
 })
 
-if (args.log == true && args.log == 'true') {
-  const WRITESTREAM = fs.createWriteStream('access.log', {flags: 'a'})
+if (log === true) {
+  const WRITESTREAM = fs.createWriteStream('FILE', {flags: 'a'})
   app.use(morgan('combined', {stream: WRITESTREAM}))
 } else {
   console.log("Log file not created")
 } 
 
-if (args.debug === true || args.debug === 'true') {
+if (debug === true) {
   app.get('/app/log/access/', (req, res) => {
     const stmt = logdb.prepare("SELECT * FROM accesslog").all();
     res.status(200).json(stmt)
