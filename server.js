@@ -52,7 +52,7 @@ app.get('/app/', (req, res) => {
 })
 
 if (log === true) {
-  const WRITESTREAM = fs.createWriteStream('FILE', {flags: 'a'})
+  const WRITESTREAM = fs.createWriteStream('accesslog', {flags: 'a'})
   app.use(morgan('combined', {stream: WRITESTREAM}))
 } else {
   console.log("Log file not created")
