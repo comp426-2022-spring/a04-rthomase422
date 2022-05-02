@@ -33,8 +33,8 @@ const fs = require('fs')
 const logdb = require('./database.js')
 
 const port = args.port || process.env.PORT || 5555
-const debug = args.debug || process.env.debug || false
-const log = args.log || process.env.log || true
+//const debug = args.debug || process.env.debug || false
+//const log = args.log || process.env.log || true
 
 var app = express()
 
@@ -58,7 +58,7 @@ if (args.log == true && args.log == 'true') {
   console.log("Log file not created")
 } 
 
-if (debug === true || debug === 'true') {
+if (args.debug === true || args.debug === 'true') {
   app.get('/app/log/access/', (req, res) => {
     const stmt = logdb.prepare("SELECT * FROM accesslog").all();
     res.status(200).json(stmt)
