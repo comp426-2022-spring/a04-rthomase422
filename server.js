@@ -52,11 +52,22 @@ app.get('/app/', (req, res) => {
 })
 
 if (log === true) {
-  const WRITESTREAM = fs.createWriteStream('accesslog', {flags: 'a'})
+  const WRITESTREAM = fs.createWriteStream('access.log', {flags: 'a'})
   app.use(morgan('combined', {stream: WRITESTREAM}))
 } else {
   console.log("Log file not created")
 } 
+
+if (debug === true) {
+  app.get('/app/log/access/', (req, res) => {
+    const stmt = logdb.prepare("SELECT * FROM accesslog").all();
+    res.status(200).json(stmt)
+  })
+
+  app.get('/app/error/', (req, res) => {
+    throw new Error("Error test successful.")
+  })
+}
 
 app.use((req, res, next) => {
   let logdata = {
@@ -110,16 +121,6 @@ app.get('/app/flip/call/tails', (req, res, next) => {
   res.status(200).json(tails)
 })
 
-if (debug === true) {
-  app.get('/app/log/access/', (req, res) => {
-    const stmt = logdb.prepare("SELECT * FROM accesslog").all();
-    res.status(200).json(stmt)
-  })
-
-  app.get('/app/error/', (req, res) => {
-    throw new Error("Error test successful.")
-  })
-}
 
 app.use(function (req, res) {
   res.status(404).send('404 NOT FOUND')
