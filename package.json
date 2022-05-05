@@ -1,0 +1,27 @@
+{
+  "name": "a04-rthomase422",
+  "version": "0.1.0",
+  "description": "Build a database with logs, errors and middleware",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm test server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/comp426-2022-spring/a04-rthomase422.git"
+  },
+  "author": "Rachel E. Thomas",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/comp426-2022-spring/a04-rthomase422/issues"
+  },
+  "homepage": "https://github.com/comp426-2022-spring/a04-rthomase422#readme",
+  "dependencies": {
+    "better-sqlite3": "^7.5.1",
+    "express": "^4.17.3",
+    "fs": "^0.0.1-security",
+    "minimist": "^1.2.6",
+    "morgan": "^1.10.0"
+  }
+}
